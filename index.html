@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Notes Storage</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    h1 { font-size: 32px; }
+    form { margin-bottom: 20px; }
+    input { padding: 8px; font-size: 16px; }
+    button { padding: 8px 12px; font-size: 16px; }
+  </style>
+</head>
+
+<body>
+
+  <h1>Notes Storage</h1>
+
+  <form id="noteForm">
+    <input type="text" id="noteInput" placeholder="Enter your note here">
+    <button type="submit">Save Note</button>
+  </form>
+
+  <ul id="notesList"></ul>
+
+  <script>
+    let form = document.getElementById("noteForm");
+    let input = document.getElementById("noteInput");
+    let list = document.getElementById("notesList");
+
+    function loadNotes() {
+      list.innerHTML = "";
+      let savedNotes = JSON.parse(localStorage.getItem("notes")) || [];
+      savedNotes.forEach(function(note) {
+        let li = document.createElement("li");
+        li.textContent = note;
+        list.appendChild(li);
+      });
+    }
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      let noteText = input.value.trim();
+      if (noteText === "") {
+        alert("Please enter a valid note!");
+        return;
+      }
+      let savedNotes = JSON.parse(localStorage.getItem("notes")) || [];
+      savedNotes.push(noteText);
+      localStorage.setItem("notes", JSON.stringify(savedNotes));
+      input.value = "";
+      loadNotes();
+    });
+
+    loadNotes();
+  </script>
+
+</body>
+</html>
